@@ -1,0 +1,66 @@
+  -- Build sorted entries
+  setColor(Theme.text)
+  local inv = player.inventory or {}
+  local entries = {}
+  for id, qty in pairs(inv) do
+    local item = Content.getItem(id)
+    table.insert(entries, {
+      id = id,
+      qty = qty,
+      item = item,
+      name = item and item.name or id,
+      value = item and (item.value or 0) or 0,
+      type = item and (item.type or "") or "",
+    })
+  end
+  table.sort(entries, function(a,b)
+    local mode = Input.getInventorySortMode()
+    if mode == "Quantity" then
+      if a.qty == b.qty then return a.name < b.name end
+      return a.qty > b.qty
+    elseif mode == "Value" then
+      if a.value == b.value then return a.name < b.name end
+      return a.value > b.value
+    elseif mode == "Type" then
+      if a.type == b.type then return a.name < b.name end
+      return a.type < b.type
+    else
+      return a.name < b.name
+    end
+  end)
+
+  if #entries == 0 then
+    setColor(Theme.subtext)
+    love.graphics.print("Empty cargo hold", cx, cy)
+  else
+    -- Grid layout
+    local cell = 56
+    local gap = 10
+    local cols = math.max(1, math.floor((w - pad*2 + gap) / (cell + gap)))
+    local gx, gy = cx, cy
+    Input.setInventoryHover(nil)
+    local mx, my = love.mouse.getPosition()
+    for index, e in ipairs(entries) do
+      local col = (index - 1) % cols
+      local row = math.floor((index - 1) / cols)
+      local rx = gx + col * (cell + gap)
+      local ry = gy + row * (cell + gap)
+      local rect = {x = rx, y = ry, w = cell, h = cell}
+      local isHover = mx >= rx and my >= ry and mx <= rx + cell and my <= ry + cell
+      -- Cell background
+      setColor(isHover and {Theme.bg2[1],Theme.bg2[2],Theme.bg2[3],0.9} or {Theme.bg1[1],Theme.bg1[2],Theme.bg1[3],0.6})
+      love.graphics.rectangle("fill", rx, ry, cell, cell, 6, 6)
+      setColor(Theme.border)
+      love.graphics.rectangle("line", rx, ry, cell, cell, 6, 6)
+      -- Icon using procedural shapes
+      local ix, iy, isz = rx + 8, ry + 8, cell - 16
+      drawItemIcon(e.item, ix, iy, isz)
+      -- Quantity bottom-right
+      setColor(Theme.text)
+      love.graphics.printf(tostring(e.qty), rx, ry + cell - 16, cell - 6, "right")
+      if isHover then
+        Input.setInventoryHover({ entry = e, rect = rect })
+      end
+    end
+  end
+

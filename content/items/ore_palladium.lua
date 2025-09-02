@@ -1,0 +1,16 @@
+return {
+  id = "ore_palladium",
+  name = "Palladium Ore",
+  type = "material",
+  rarity = "Uncommon",
+  tier = 2,
+  stack = 9999,
+  value = 12,
+  mass = 1.0,
+  volume = 0.45,
+  market = { buy = 11, sell = 15, volatility = 0.12 },
+  tags = { "ore", "precious", "trade" },
+  description = "A dense ore containing palladium, sought after for advanced electronics and catalytic systems.",
+  flavor = "Pirates call it ‘pilot’s gold’.",
+  icon = nil,
+}

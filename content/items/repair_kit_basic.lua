@@ -1,0 +1,21 @@
+return {
+  id = "repair_kit_basic",
+  name = "Basic Repair Kit",
+  type = "consumable",
+  rarity = "Common",
+  tier = 1,
+  stack = 50,
+  value = 100,
+  mass = 0.6,
+  volume = 0.2,
+  effect = { hp = 30 },
+  use = {
+    cooldown = 2.0,
+    restrictions = { inCombat = false },
+    animation = "injector",
+  },
+  tags = { "repair", "consumable", "utility" },
+  description = "A sealed cartridge containing fast-curing hull polymers and a micro-applicator.",
+  flavor = "Not pretty, but it holds.",
+  icon = nil,
+}

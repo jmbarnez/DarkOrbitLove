@@ -1,0 +1,21 @@
+  -- Tooltip near cursor for hovered cell
+  if Input.getInventoryHover() and Input.getInventoryHover().entry then
+    local e = Input.getInventoryHover().entry
+    local item = e.item
+    local mx, my = love.mouse.getPosition()
+    local tw, th = 260, 72
+    local tx = math.min(mx + 16, love.graphics.getWidth() - tw - 8)
+    local ty = math.min(my + 16, love.graphics.getHeight() - th - 8)
+    setColor({0,0,0,0.35})
+    love.graphics.rectangle("fill", tx + 4, ty + 6, tw, th, 8, 8)
+    setColor({0.12,0.13,0.19,0.98})
+    love.graphics.rectangle("fill", tx, ty, tw, th, 8, 8)
+    setColor(Theme.border)
+    love.graphics.rectangle("line", tx, ty, tw, th, 8, 8)
+    setColor(Theme.text)
+    love.graphics.print(item and item.name or e.id, tx + 10, ty + 8)
+    setColor(Theme.text)
+    love.graphics.print(string.format("x%d  •  %s  •  %d cr", e.qty, item and (item.type or "") or "", item and (item.value or 0) or 0), tx + 10, ty + 32)
+  end
+end
+
